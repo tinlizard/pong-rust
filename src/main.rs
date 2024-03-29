@@ -14,6 +14,7 @@ struct Paddle {
     color_paddle: color::Color,
     offset: f32,
     rect: CollisionRect,
+    score: i32,
 }
 
 struct Ball {
@@ -51,13 +52,22 @@ impl Ball {
             self.offset_y = -self.offset_y;
         }
     }
-    fn check_offscreen(&mut self){
-        if self.x < 0.0 || self.x > 800.0 {
+    fn check_offscreen(&mut self, paddle1: &mut Paddle, paddle2: &mut Paddle){
+        if self.x < 0.0  {
             self.x = screen_width() / 2.0;
             self.y = screen_height() / 2.0;
             self.rect.x = screen_width() / 2.0;
             self.rect.y = screen_height() / 2.0;
             self.offset_y = 2.0;
+            paddle2.score += 1;
+        } 
+        else if self.x > 800.0 {
+            self.x = screen_width() / 2.0;
+            self.y = screen_height() / 2.0;
+            self.rect.x = screen_width() / 2.0;
+            self.rect.y = screen_height() / 2.0;
+            self.offset_y = 2.0;
+            paddle1.score += 1;
         }
     }
     fn check_paddle_collision(&mut self, paddle_rect: &CollisionRect) {
@@ -102,6 +112,7 @@ async fn main() {
         color_paddle: WHITE,
         offset: 2.0,
         rect: CollisionRect {x: 0.0, y: 100.0, width: 20.0, height:120.0},
+        score: 0,
     };
     let mut ball = Ball {
         x: screen_width()/2.0,
@@ -120,6 +131,7 @@ async fn main() {
         color_paddle: WHITE,
         offset: 2.0,
         rect: CollisionRect {x: 780.0, y: 100.0, width: 20.0, height:120.0},
+        score: 0,
     };
     loop {
         clear_background(BLACK);
@@ -132,7 +144,9 @@ async fn main() {
         ball.check_paddle_collision(&paddle_left.rect);
         ball.check_paddle_collision(&paddle_right.rect);
         ball.reverse_direction();
-        ball.check_offscreen();
+        ball.check_offscreen(&mut paddle_left, &mut paddle_right);
+        draw_text_ex(&paddle_left.score.to_string(),20.0,30.0,TextParams::default());
+        draw_text_ex(&paddle_right.score.to_string(),780.0,20.0,TextParams::default());
         
         next_frame().await
     }
