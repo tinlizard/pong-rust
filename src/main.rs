@@ -145,8 +145,8 @@ async fn main() {
         ball.check_paddle_collision(&paddle_right.rect);
         ball.reverse_direction();
         ball.check_offscreen(&mut paddle_left, &mut paddle_right);
-        draw_text_ex(&paddle_left.score.to_string(),20.0,30.0,TextParams::default());
-        draw_text_ex(&paddle_right.score.to_string(),780.0,20.0,TextParams::default());
+        draw_text_ex(&paddle_left.score.to_string(),20.0,30.0,TextParams{font_size: 30, ..Default::default()});
+        draw_text_ex(&paddle_right.score.to_string(),780.0,20.0,TextParams{font_size: 30,..Default::default()});
         
         next_frame().await
     }
