@@ -119,7 +119,7 @@ async fn main() {
         y: screen_height()/2.0,
         radius: 10.0,
         color: WHITE,
-        offset_x: 2.0,
+        offset_x: 3.0,
         offset_y: 2.0,
         rect: CollisionRect {x: screen_width()/2.0,y:screen_height()/2.0,width:10.0,height:10.0},
     };
